@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row">
+        <div class="col-5 mx-auto">
+            <h3 class="bg-primary text-white p-3 rounded-3">
+                {{getName()}}'s Todo List
+            </h3>
+
+            <div class="input-group mb-3">
+                <input type="text" [(ngModel)]="inputText" class="form-control" (keyup.enter)="addItem()">
+                <button class="btn" (click)="addItem(); inputText=''" [class]="getBtnClasses()">Add</button>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" [(ngModel)]="displayAll" class="form-check-input" name="" id="displayAll">
+                <label for="displayAll" class="form-check-label">Display All</label>
+            </div>
+
+            <div class="alert alert-warning" *ngIf="!getItems().length">All todos completed.</div>
+            <div class="my-2">{{displayCount()}} todos completed</div>
+
+            <table class="table table-bordered" *ngIf="getItems().length">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr *ngFor="let item of getItems(); let i = index;" [class.bg-success]="item.action" [class.bg-warning]="!item.action"> -->
+                    <tr *ngFor="let item of getItems(); let i = index;" [class]="{'bg-success': item.action, 'bg-warning': !item.action}">
+                        <td>{{i + 1}}</td>
+                        <td>{{item.description}}</td>
+                        <td>
+                            <!-- <div *ngIf="item.action">Yes</div>
+                            <div *ngIf="!item.action">No</div> -->
+
+                            <div [ngSwitch]="item.action">
+                                <div *ngSwitchCase="true">Yes</div>
+                                <div *ngSwitchDefault>No</div>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="checkbox" (change)="onActionChanged(item)" [(ngModel)]="item.action">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
